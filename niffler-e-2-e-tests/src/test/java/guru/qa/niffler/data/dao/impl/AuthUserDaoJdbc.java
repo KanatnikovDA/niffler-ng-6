@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -72,5 +74,28 @@ public class AuthUserDaoJdbc implements AuthUserDao {
     } catch (SQLException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Override
+  public List<AuthUserEntity> findAll() {
+    List<AuthUserEntity> users = new ArrayList<>();
+    try (PreparedStatement ps = connection.prepareStatement("SELECT * FROM \"user\"")) {
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          AuthUserEntity user = new AuthUserEntity();
+          user.setId(rs.getObject("id", UUID.class));
+          user.setUsername(rs.getString("username"));
+          user.setPassword(rs.getString("password"));
+          user.setEnabled(rs.getBoolean("enabled"));
+          user.setAccountNonExpired(rs.getBoolean("account_non_expired"));
+          user.setAccountNonLocked(rs.getBoolean("account_non_locked"));
+          user.setCredentialsNonExpired(rs.getBoolean("credentials_non_expired"));
+          users.add(user);
+        }
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return users;
   }
 }
