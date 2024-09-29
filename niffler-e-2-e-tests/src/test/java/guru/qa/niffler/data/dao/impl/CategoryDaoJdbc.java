@@ -19,7 +19,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     public CategoryEntity create(CategoryEntity category) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO category (username, name, archived) " +
+                    "INSERT INTO \"category\" (username, name, archived) " +
                             "VALUES (?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS
             )) {
@@ -49,7 +49,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     public Optional<CategoryEntity> findCategoryById(UUID id) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM category WHERE id = ?"
+                    "SELECT * FROM \"category\" WHERE id = ?"
             )) {
                 ps.setObject(1, id);
                 ps.execute();
@@ -75,7 +75,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     public Optional<CategoryEntity> findCategoryByUsernameAndCategoryName(String username, String categoryName) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM category WHERE username = ? AND name = ?"
+                    "SELECT * FROM \"category\" WHERE username = ? AND name = ?"
             )) {
                 ps.setString(1, username);
                 ps.setString(2, categoryName);
@@ -129,7 +129,7 @@ public class CategoryDaoJdbc implements CategoryDao {
     public void deleteCategory(CategoryEntity category) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "DELETE FROM category WHERE id = ?"
+                    "DELETE FROM \"category\" WHERE id = ?"
             )) {
                 ps.setObject(1, category.getId());
                 ps.execute();

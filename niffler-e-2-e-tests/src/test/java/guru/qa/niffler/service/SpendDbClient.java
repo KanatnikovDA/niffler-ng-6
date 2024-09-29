@@ -9,6 +9,8 @@ import guru.qa.niffler.data.entity.spend.SpendEntity;
 import guru.qa.niffler.model.CategoryJson;
 import guru.qa.niffler.model.SpendJson;
 
+import java.sql.SQLException;
+
 public class SpendDbClient {
     private final SpendDao spendDao = new SpendDaoJdbc();
     private final CategoryDao categoryDao = new CategoryDaoJdbc();
@@ -35,5 +37,8 @@ public class SpendDbClient {
         CategoryEntity categoryEntity = CategoryEntity.fromJson(category);
         categoryDao.deleteCategory(categoryEntity);
     }
-
+    public void deleteSpend(SpendJson spend) throws SQLException {
+        SpendEntity spendEntity = SpendEntity.fromJson(spend);
+        spendDao.deleteSpend(spendEntity);
+    }
 }

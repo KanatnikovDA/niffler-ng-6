@@ -17,7 +17,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDAO {
     public UserEntity createUser(UserEntity user) {
         try (Connection connection = Databases.connection(CFG.userdataJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO user (username, currency, firstname, surname, fullname, photo, photoSmall) " +
+                    "INSERT INTO \"user\" (username, currency, firstname, surname, fullname, photo, photoSmall) " +
                             "VALUES ( ?, ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS
             )) {
@@ -25,7 +25,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDAO {
                 ps.setObject(2, user.getCurrency());
                 ps.setString(3, user.getFirstname());
                 ps.setString(4, user.getSurname());
-                ps.setString(5, user.getFullname());
+                ps.setString(5, user.getFullName());
                 ps.setObject(6, user.getPhoto());
                 ps.setObject(7, user.getPhotoSmall());
                 ps.executeUpdate();
@@ -50,7 +50,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDAO {
     public Optional<UserEntity> findById(UUID id) {
         try (Connection connection = Databases.connection(CFG.userdataJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM user WHERE id = ?"
+                    "SELECT * FROM \"user\" WHERE id = ?"
             )) {
                 ps.setObject(1, id);
                 ps.execute();
@@ -62,9 +62,9 @@ public class UserdataUserDAOJdbc implements UserdataUserDAO {
                         ue.setCurrency(rs.getObject("currency", CurrencyValues.class));
                         ue.setFirstname(rs.getString("firstname"));
                         ue.setSurname(rs.getString("surname"));
-                        ue.setFullname(rs.getString("fullname"));
+                        ue.setFullName(rs.getString("full_name"));
                         ue.setPhoto(rs.getObject("photo", byte[].class));
-                        ue.setPhotoSmall(rs.getObject("photoSmall", byte[].class));
+                        ue.setPhotoSmall(rs.getObject("photo_small", byte[].class));
                         return Optional.of(ue);
                     } else {
                         return Optional.empty();
@@ -80,7 +80,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDAO {
     public Optional<UserEntity> findByUsername(String username) {
         try (Connection connection = Databases.connection(CFG.userdataJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM user WHERE username = ?"
+                    "SELECT * FROM \"user\" WHERE username = ?"
             )) {
                 ps.setObject(1, username);
                 ps.execute();
@@ -92,9 +92,9 @@ public class UserdataUserDAOJdbc implements UserdataUserDAO {
                         ue.setCurrency(rs.getObject("currency", CurrencyValues.class));
                         ue.setFirstname(rs.getString("firstname"));
                         ue.setSurname(rs.getString("surname"));
-                        ue.setFullname(rs.getString("fullname"));
+                        ue.setFullName(rs.getString("full_name"));
                         ue.setPhoto(rs.getObject("photo", byte[].class));
-                        ue.setPhotoSmall(rs.getObject("photoSmall", byte[].class));
+                        ue.setPhotoSmall(rs.getObject("photo_small", byte[].class));
                         return Optional.of(ue);
                     } else {
                         return Optional.empty();
@@ -110,7 +110,7 @@ public class UserdataUserDAOJdbc implements UserdataUserDAO {
     public void delete(UserEntity user) {
         try (Connection connection = Databases.connection(CFG.userdataJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "DELETE FROM user WHERE id = ?"
+                    "DELETE FROM \"user\" WHERE id = ?"
             )) {
                 ps.setObject(1, user.getId());
                 ps.execute();

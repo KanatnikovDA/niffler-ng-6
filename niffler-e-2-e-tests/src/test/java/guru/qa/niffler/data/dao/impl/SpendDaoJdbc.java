@@ -21,7 +21,7 @@ public class SpendDaoJdbc implements SpendDao {
     public SpendEntity create(SpendEntity spend) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "INSERT INTO spend (username, spend_date, currency, amount, description, category_id) " +
+                    "INSERT INTO \"spend\" (username, spend_date, currency, amount, description, category_id) " +
                             "VALUES ( ?, ?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS
             )) {
@@ -54,7 +54,7 @@ public class SpendDaoJdbc implements SpendDao {
     public Optional<SpendEntity> findSpendById(UUID id) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM spend WHERE id = ?"
+                    "SELECT * FROM \"spend\" WHERE id = ?"
             )) {
                 ps.setObject(1, id);
                 ps.execute();
@@ -63,7 +63,7 @@ public class SpendDaoJdbc implements SpendDao {
                         SpendEntity se = new SpendEntity();
                         se.setId(rs.getObject("id", UUID.class));
                         se.setUsername(rs.getString("username"));
-                        se.setCurrency(rs.getObject("currency", CurrencyValues.class));
+                        se.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
                         se.setSpendDate(rs.getDate("spend_date"));
                         se.setAmount(rs.getDouble("amount"));
                         se.setDescription(rs.getString("description"));
@@ -91,7 +91,7 @@ public class SpendDaoJdbc implements SpendDao {
 
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "SELECT * FROM spend WHERE username = ?"
+                    "SELECT * FROM \"spend\" WHERE username = ?"
             )) {
                 ps.setObject(1, username);
                 ps.execute();
@@ -100,11 +100,15 @@ public class SpendDaoJdbc implements SpendDao {
                         SpendEntity se = new SpendEntity();
                         se.setId(rs.getObject("id", UUID.class));
                         se.setUsername(rs.getString("username"));
-                        se.setCurrency(rs.getObject("currency", CurrencyValues.class));
+                        se.setCurrency(CurrencyValues.valueOf(rs.getString("currency")));
                         se.setSpendDate(rs.getDate("spend_date"));
                         se.setAmount(rs.getDouble("amount"));
                         se.setDescription(rs.getString("description"));
-                        se.setCategory(rs.getObject("category_id", CategoryEntity.class));
+                        CategoryDaoJdbc categoryDaoJdbc = new CategoryDaoJdbc();
+                        CategoryEntity ce = categoryDaoJdbc
+                                .findCategoryById(UUID.fromString(rs.getString("category_id")))
+                                .orElseThrow(() -> new RuntimeException("Category not found"));
+                        se.setCategory(ce);
 
                         spendEntities.add(se);
                     }
@@ -120,7 +124,7 @@ public class SpendDaoJdbc implements SpendDao {
     public void deleteSpend(SpendEntity spend) {
         try (Connection connection = Databases.connection(CFG.spendJdbcUrl())) {
             try (PreparedStatement ps = connection.prepareStatement(
-                    "DELETE FROM spend WHERE id = ?"
+                    "DELETE FROM \"spend\" WHERE id = ?"
             )) {
                 ps.setObject(1, spend.getId());
                 ps.execute();
