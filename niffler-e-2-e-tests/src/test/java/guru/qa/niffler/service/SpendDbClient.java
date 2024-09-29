@@ -7,6 +7,8 @@ import guru.qa.niffler.data.entity.spend.CategoryEntity;
 import guru.qa.niffler.data.entity.spend.SpendEntity;
 import guru.qa.niffler.model.SpendJson;
 
+import java.sql.Connection;
+
 import static guru.qa.niffler.data.Databases.transaction;
 
 public class SpendDbClient {
@@ -25,7 +27,8 @@ public class SpendDbClient {
               new SpendDaoJdbc(connection).create(spendEntity)
           );
         },
-        CFG.spendJdbcUrl()
+        CFG.spendJdbcUrl(),
+            Connection.TRANSACTION_READ_COMMITTED
     );
   }
 }
