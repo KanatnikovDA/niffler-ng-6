@@ -8,7 +8,9 @@ import guru.qa.niffler.data.entity.auth.Authority;
 import guru.qa.niffler.data.entity.auth.AuthorityEntity;
 import guru.qa.niffler.data.entity.userdata.UserEntity;
 import guru.qa.niffler.data.repository.AuthUserRepository;
+import guru.qa.niffler.data.repository.UserDataRepository;
 import guru.qa.niffler.data.repository.impl.AuthUserRepositoryJdbc;
+import guru.qa.niffler.data.repository.impl.UseDatarRepositoryJdbc;
 import guru.qa.niffler.data.tpl.DataSources;
 import guru.qa.niffler.data.tpl.XaTransactionTemplate;
 import guru.qa.niffler.model.UserJson;
@@ -27,6 +29,7 @@ public class UsersDbClient {
 
   private final AuthUserRepository authUserRepository = new AuthUserRepositoryJdbc();
   private final UdUserDao udUserDao = new UdUserDaoSpringJdbc();
+  private final UserDataRepository udUserRepo = new UseDatarRepositoryJdbc();
 
   private final TransactionTemplate txTemplate = new TransactionTemplate(
       new JdbcTransactionManager(
@@ -66,4 +69,25 @@ public class UsersDbClient {
         }
     );
   }
+
+    public void addFriend(UserJson requester, UserJson addressee){
+        xaTransactionTemplate.execute(() ->{
+            udUserRepo.addFriend(UserEntity.fromJson(requester), UserEntity.fromJson(addressee));
+            return null;
+        });
+    }
+
+    public  void addIncomeInvitation(UserJson requester, UserJson addressee){
+        xaTransactionTemplate.execute(() ->{
+            udUserRepo.addIncomeInvitation(UserEntity.fromJson(requester), UserEntity.fromJson(addressee));
+            return null;
+        });
+    }
+
+    public  void addOutcomeInvitation(UserJson requester, UserJson addressee){
+        xaTransactionTemplate.execute(() ->{
+            udUserRepo  .addOutcomeInvitation(UserEntity.fromJson(requester), UserEntity.fromJson(addressee));
+            return null;
+        });
+    }
 }
