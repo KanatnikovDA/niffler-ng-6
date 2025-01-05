@@ -13,7 +13,6 @@ import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ParameterResolver;
 import org.junit.platform.commons.support.AnnotationSupport;
 
-import java.util.ArrayList;
 
 public class UserExtension implements BeforeEachCallback, ParameterResolver {
 
@@ -26,20 +25,18 @@ public class UserExtension implements BeforeEachCallback, ParameterResolver {
   public void beforeEach(ExtensionContext context) throws Exception {
     AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
         .ifPresent(userAnno -> {
-          if ("".equals(userAnno.username())) {
-            final String username = RandomDataUtils.randomUsername();
-            UserJson testUser = usersClient.createUser(username, defaultPassword);
-            context.getStore(NAMESPACE).put(
-                context.getUniqueId(),
-                testUser.addTestData(
-                    new TestData(
-                        defaultPassword,
-                        new ArrayList<>(),
-                        new ArrayList<>()
-                    )
-                )
-            );
-          }
+            if ("".equals(userAnno.username())) {
+                final String username = RandomDataUtils.randomUsername();
+                UserJson testUser = usersClient.createUser(username, defaultPassword);
+
+                usersClient.addIncomeInvitation(testUser, userAnno.incomeInvitations());
+                usersClient.addOutcomeInvitation(testUser, userAnno.outcomeInvitations());
+                usersClient.addFriend(testUser, userAnno.friends());
+                context.getStore(NAMESPACE).put(
+                        context.getUniqueId(),
+                        testUser
+                );
+            }
         });
   }
 

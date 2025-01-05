@@ -6,9 +6,12 @@ import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
 import guru.qa.niffler.model.CategoryJson;
+import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.ProfilePage;
 import org.junit.jupiter.api.Test;
+
+import static com.codeborne.selenide.Selenide.open;
 
 @WebTest
 public class ProfileTest {
@@ -23,11 +26,11 @@ public class ProfileTest {
   )
   @Test
   void archivedCategoryShouldPresentInCategoriesList(CategoryJson category) {
-    Selenide.open(CFG.frontUrl(), LoginPage.class)
+    open(CFG.frontUrl(), LoginPage.class)
         .successLogin("duck", "12345")
         .checkThatPageLoaded();
 
-    Selenide.open(CFG.frontUrl() + "profile", ProfilePage.class)
+    open(CFG.frontUrl() + "profile", ProfilePage.class)
         .checkArchivedCategoryExists(category.name())
         .checkName("")
         .checkAlert("")
@@ -42,11 +45,22 @@ public class ProfileTest {
   )
   @Test
   void activeCategoryShouldPresentInCategoriesList(CategoryJson category) {
-    Selenide.open(CFG.frontUrl(), LoginPage.class)
+    open(CFG.frontUrl(), LoginPage.class)
         .successLogin("duck", "12345")
         .checkThatPageLoaded();
 
-    Selenide.open(CFG.frontUrl() + "profile", ProfilePage.class)
+    open(CFG.frontUrl() + "profile", ProfilePage.class)
         .checkCategoryExists(category.name());
+  }
+
+  @User
+  @Test
+  void userShouldEditProfile(UserJson user) {
+    open(CFG.frontUrl(), LoginPage.class)
+            .successLogin(user.username(), user.testData().password())
+            .header()
+            .toProfilePage()
+            .setName("Name")
+            .checkName("Name");
   }
 }

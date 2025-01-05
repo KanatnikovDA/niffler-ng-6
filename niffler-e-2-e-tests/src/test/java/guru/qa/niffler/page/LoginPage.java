@@ -1,6 +1,7 @@
 package guru.qa.niffler.page;
 
 import com.codeborne.selenide.SelenideElement;
+import io.qameta.allure.Step;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -24,18 +25,16 @@ public class LoginPage {
   }
 
   @Nonnull
+  @Step("Авторизоваться пользователем: {0}")
   public MainPage successLogin(String username, String password) {
-    login(username, password);
-    return new MainPage();
-  }
-
-  public void login(String username, String password) {
     usernameInput.setValue(username);
     passwordInput.setValue(password);
     submitButton.click();
+    return new MainPage();
   }
 
   @Nonnull
+  @Step("Проверить что ошибка содержит текст: {0}")
   public LoginPage checkError(String error) {
     errorContainer.shouldHave(text(error));
     return this;
