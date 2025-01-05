@@ -1,6 +1,5 @@
 package guru.qa.niffler.test.web;
 
-import com.codeborne.selenide.Selenide;
 import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.User;
@@ -39,9 +38,7 @@ public class ProfileTest {
 
   @User(
       username = "duck",
-      categories = @Category(
-          archived = false
-      )
+      categories = @Category()
   )
   @Test
   void activeCategoryShouldPresentInCategoriesList(CategoryJson category) {

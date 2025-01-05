@@ -6,8 +6,6 @@ import io.qameta.allure.Step;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.codeborne.selenide.Selenide.$;
-
 public class Calendar {
     private final SelenideElement calendarInput;
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");

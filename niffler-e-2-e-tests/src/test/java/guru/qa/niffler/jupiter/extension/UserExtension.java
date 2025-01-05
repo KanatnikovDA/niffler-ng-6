@@ -1,7 +1,6 @@
 package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.model.TestData;
 import guru.qa.niffler.model.UserJson;
 import guru.qa.niffler.service.UsersClient;
 import guru.qa.niffler.service.impl.UsersDbClient;
@@ -22,7 +21,7 @@ public class UserExtension implements BeforeEachCallback, ParameterResolver {
   private final UsersClient usersClient = new UsersDbClient();
 
   @Override
-  public void beforeEach(ExtensionContext context) throws Exception {
+  public void beforeEach(ExtensionContext context) {
     AnnotationSupport.findAnnotation(context.getRequiredTestMethod(), User.class)
         .ifPresent(userAnno -> {
             if ("".equals(userAnno.username())) {
