@@ -7,6 +7,7 @@ import guru.qa.niffler.page.component.Calendar;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Condition.attributeMatching;
 import static com.codeborne.selenide.Condition.disabled;
@@ -33,6 +34,7 @@ public class ProfilePage extends BasePage<ProfilePage> {
 
   private final Calendar calendar = new Calendar($(".ProfileCalendar"));
 
+  @Step("Ввести name = {0}")
   @Nonnull
   public ProfilePage setName(String name) {
     nameInput.clear();
@@ -53,12 +55,14 @@ public class ProfilePage extends BasePage<ProfilePage> {
   }
 
   @Nonnull
+  @Step("Проверить, наличие категории {0}")
   public ProfilePage checkCategoryExists(String category) {
     bubbles.find(text(category)).shouldBe(visible);
     return this;
   }
 
   @Nonnull
+  @Step("Проверить, наличие архивной категории {0}")
   public ProfilePage checkArchivedCategoryExists(String category) {
     archivedSwitcher.click();
     bubblesArchived.find(text(category)).shouldBe(visible);
@@ -72,6 +76,7 @@ public class ProfilePage extends BasePage<ProfilePage> {
   }
 
   @Nonnull
+  @Step("Проверить, что Name содержит {0}")
   public ProfilePage checkName(String name) {
     nameInput.shouldHave(value(name));
     return this;
