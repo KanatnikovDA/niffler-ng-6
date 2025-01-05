@@ -13,16 +13,20 @@ import static com.codeborne.selenide.CollectionCondition.textsInAnyOrder;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 
-public class SpendingTable {
-    private final SelenideElement spends = $(".MuiTableContainer-root");
-    private static final ElementsCollection timePeriods = $$("[role='option']");
-    private final SelenideElement deleteButton = $("#delete");
+public class SpendingTable extends BaseComponent<SpendingTable> {
+    private final SelenideElement spends = self.find(".MuiTableContainer-root");
+    private final SelenideElement deleteButton = self.find("#delete");
+
+    private final ElementsCollection timePeriods = self.findAll("[role='option']");
 
     private static final String deleteConfirmButton = ".MuiDialogActions-spacing [type='button']:nth-child(2)";
     private static final String spendingRow = "tbody tr";
     private static final String spendingColumn = "td:nth-child(4)";
+
+    public SpendingTable() {
+        super($("#spendings"));
+    }
 
     @Nonnull
     @Step("Выбор периода для отображения трат: {period}")

@@ -58,6 +58,7 @@ public class ProfileTest {
             .header()
             .toProfilePage()
             .setName("Name")
+            .checkAlert("Profile successfully updated")
             .checkName("Name");
   }
 }
