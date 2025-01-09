@@ -6,7 +6,7 @@ import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.model.rest.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import org.junit.jupiter.api.Test;
 
@@ -40,7 +40,7 @@ public class LoginTest {
   @Test
   void userShouldStayOnLoginPageAfterLoginWithBadCredentials() {
     LoginPage loginPage = Selenide.open(CFG.frontUrl(), LoginPage.class);
-    loginPage.login(randomUsername(), "BAD");
+    loginPage.successLogin(randomUsername(), "BAD");
     loginPage.checkError("Bad credentials");
   }
 }
