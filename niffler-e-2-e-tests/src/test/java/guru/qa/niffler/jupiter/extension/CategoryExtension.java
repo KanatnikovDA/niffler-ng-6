@@ -2,8 +2,8 @@ package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.jupiter.annotation.Category;
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.model.rest.CategoryJson;
+import guru.qa.niffler.model.rest.UserJson;
 import guru.qa.niffler.service.SpendClient;
 import guru.qa.niffler.service.impl.SpendDbClient;
 import org.apache.commons.lang3.ArrayUtils;
@@ -35,7 +35,7 @@ public class CategoryExtension implements
             List<CategoryJson> result = new ArrayList<>();
 
             UserJson user = context.getStore(UserExtension.NAMESPACE)
-                .get(context.getUniqueId(), UserJson.class);
+                                   .get(context.getUniqueId(), UserJson.class);
 
             for (Category categoryAnno : userAnno.categories()) {
               final String categoryName = "".equals(categoryAnno.name())

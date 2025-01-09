@@ -5,8 +5,12 @@ import io.qameta.allure.Step;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class SearchField {
-    private final SelenideElement searchField = $("input[type='text']");
+public class SearchField extends BaseComponent<SearchField> {
+    private final SelenideElement searchField = self.find("input[type='text']");
+
+    public SearchField() {
+        super($("input[aria-label='search']"));
+    }
 
     @Step("Поиск по значению: {value}")
     public SearchField search(String value) {

@@ -9,11 +9,15 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
-public class Header {
-    private final SelenideElement menu = $("ul[role='menu']");
-    private final SelenideElement header = $("#root header");
+public class Header extends BaseComponent<Header> {
+    private final SelenideElement menu = self.find("ul[role='menu']");
+    private final SelenideElement header = self.find("#root header");
 
-    @Step("Перейти на \"Friends\" страницу")
+  public Header() {
+    super($("#root header "));
+  }
+
+  @Step("Перейти на \"Friends\" страницу")
     public FriendsPage toFriendsPage() {
         header.$("button").click();
         menu.$$("li").find(text("Friends")).click();

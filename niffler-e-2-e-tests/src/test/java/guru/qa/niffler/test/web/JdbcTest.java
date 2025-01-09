@@ -1,10 +1,10 @@
 package guru.qa.niffler.test.web;
 
 import guru.qa.niffler.jupiter.extension.UsersClientExtension;
-import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.model.CurrencyValues;
-import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.model.rest.CategoryJson;
+import guru.qa.niffler.model.rest.CurrencyValues;
+import guru.qa.niffler.model.rest.SpendJson;
+import guru.qa.niffler.model.rest.UserJson;
 import guru.qa.niffler.service.UsersClient;
 import guru.qa.niffler.service.impl.SpendDbClient;
 import org.junit.jupiter.api.Test;
@@ -25,18 +25,18 @@ public class JdbcTest {
 
     SpendJson spend = spendDbClient.createSpend(
         new SpendJson(
-            null,
-            new Date(),
-            new CategoryJson(
+                null,
+                new Date(),
+                1000.0,
+                CurrencyValues.RUB,
+                new CategoryJson(
                 null,
                 "cat-name-tx-3",
                 "duck",
                 false
             ),
-            CurrencyValues.RUB,
-            1000.0,
-            "spend-name-tx-3",
-            "duck"
+                "spend-name-tx-3",
+                "duck"
         )
     );
 

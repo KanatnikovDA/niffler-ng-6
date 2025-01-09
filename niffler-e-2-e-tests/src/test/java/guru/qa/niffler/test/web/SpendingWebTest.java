@@ -4,8 +4,8 @@ import guru.qa.niffler.config.Config;
 import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.User;
 import guru.qa.niffler.jupiter.annotation.meta.WebTest;
-import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.model.rest.SpendJson;
+import guru.qa.niffler.model.rest.UserJson;
 import guru.qa.niffler.page.LoginPage;
 import guru.qa.niffler.page.MainPage;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,8 @@ public class SpendingWebTest {
                 .successLogin("duck", "12345")
                 .editSpending(spend.description())
                 .setNewSpendingDescription(newDescription)
-                .save();
+                .save()
+                .checkAlert("Spending is edited successfully");
 
         new MainPage().checkThatTableContainsSpending(newDescription);
     }

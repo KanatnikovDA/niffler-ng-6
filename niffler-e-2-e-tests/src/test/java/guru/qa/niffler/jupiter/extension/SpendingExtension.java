@@ -2,10 +2,10 @@ package guru.qa.niffler.jupiter.extension;
 
 import guru.qa.niffler.jupiter.annotation.Spending;
 import guru.qa.niffler.jupiter.annotation.User;
-import guru.qa.niffler.model.CategoryJson;
-import guru.qa.niffler.model.CurrencyValues;
-import guru.qa.niffler.model.SpendJson;
-import guru.qa.niffler.model.UserJson;
+import guru.qa.niffler.model.rest.CategoryJson;
+import guru.qa.niffler.model.rest.CurrencyValues;
+import guru.qa.niffler.model.rest.SpendJson;
+import guru.qa.niffler.model.rest.UserJson;
 import guru.qa.niffler.service.SpendClient;
 import guru.qa.niffler.service.impl.SpendDbClient;
 import org.apache.commons.lang3.ArrayUtils;
@@ -33,22 +33,22 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
           if (ArrayUtils.isNotEmpty(userAnno.spendings())) {
             List<SpendJson> result = new ArrayList<>();
             UserJson user = context.getStore(UserExtension.NAMESPACE)
-                .get(context.getUniqueId(), UserJson.class);
+                                   .get(context.getUniqueId(), UserJson.class);
 
             for (Spending spendAnno : userAnno.spendings()) {
               SpendJson spend = new SpendJson(
-                  null,
-                  new Date(),
-                  new CategoryJson(
+                      null,
+                      new Date(),
+                      spendAnno.amount(),
+                      CurrencyValues.RUB,
+                      new CategoryJson(
                       null,
                       spendAnno.category(),
                       user != null ? user.username() : userAnno.username(),
                       false
                   ),
-                  CurrencyValues.RUB,
-                  spendAnno.amount(),
-                  spendAnno.description(),
-                  user != null ? user.username() : userAnno.username()
+                      spendAnno.description(),
+                      user != null ? user.username() : userAnno.username()
               );
 
               SpendJson createdSpend = spendClient.createSpend(spend);
@@ -57,7 +57,7 @@ public class SpendingExtension implements BeforeEachCallback, ParameterResolver 
 
 
             if (user != null) {
-              user.testData().spendings().addAll(result);
+              user.testData().spends().addAll(result);
             } else {
               context.getStore(NAMESPACE).put(
                   context.getUniqueId(),
