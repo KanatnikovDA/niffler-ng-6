@@ -95,8 +95,8 @@ public class EditSpendingPage extends BasePage<EditSpendingPage> {
 
   @Step("Click submit button to create new spending")
   @Nonnull
-  public EditSpendingPage saveSpending() {
+  public MainPage saveSpending() {
     saveBtn.click();
-    return this;
+    return new MainPage();
   }
 }
