@@ -10,10 +10,12 @@ import guru.qa.niffler.model.rest.UserJson;
 import guru.qa.niffler.service.UsersClient;
 import io.qameta.allure.Step;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.Assertions;
 import retrofit2.Response;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.IOException;
+import java.util.List;
 
 import static guru.qa.niffler.utils.RandomDataUtils.randomUsername;
 import static java.util.Objects.requireNonNull;
@@ -128,5 +130,17 @@ public class UsersApiClient implements UsersClient {
             .add(response.body());
       }
     }
+  }
+
+  public List<UserJson> getFriends(String username) {
+    Response<List<UserJson>> response;
+    try {
+      response = userdataApi.friends(username, "")
+                            .execute();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+    Assertions.assertEquals(200, response.code());
+    return response.body();
   }
 }
